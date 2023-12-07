@@ -1,5 +1,6 @@
 A3 de teoria da computação 
-O objetivo do trabalho é criar um programa que ao ler uma String com uma expreção matematica, valide se a expreção esta correta, sem letra, sem espaços, com parenteses balanceados, com o simbolos e numeros na ordem correta, retorne o resultado da equação ou mostre um erro
+O objetivo do trabalho é criar um programa que ao ler uma String com uma expreção matematica, valide se a expreção esta correta, sem letra, sem espaços, com parenteses balanceados, com o simbolos e numeros na ordem correta, retorne o resultado da equação ou mostre um erro.
+Todos os resultados são mostrados no terminal, caso algun erro tenha sera mostra do erro foi, caso não exista problema nenhum com a String o resultado sera printado normalmente. 
 
 Gabriel Lourenço Santos RA: 822164041
 

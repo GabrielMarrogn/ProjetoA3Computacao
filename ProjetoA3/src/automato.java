@@ -3,34 +3,33 @@ import java.util.Stack;
 public class automato {
     public static void main(String[] args) {
         // Todos as formulas dentro do exemplo devem ser aceitas
-        String exemplo = "(2 * 1) * 9; 1 + 3; (1 * 3 + 5) * 8; 2 + 5 + 12; 4 + 4 + 4;";
+        //String exemploE = "(24 / 1) * 9 + 3; 10 - 4; (1 * 3 + 4 / 5 - 2) +100 ; 10 - 4 + 12; (4 + 4) / 4; 1+1;";
+
+        //String usada para testar erros
+        String exemplo = "(1+1) + (); 4+4+a; 10/2+; (2+7-1; 2++2; 22; a";
         
 
         // Retira todos os espacos em branco
         String espaco = exemplo.replaceAll(" ", "").trim();
 
-        // Divide as string pelas ";" e coloca em um array
+        // Divide as string pelos ";" e coloca em um array
         String[] exemploSeparado = espaco.split(";");
 
         //for para checar o se a string passa por todos os metodos de checagem 
         for (int i = 0; i < exemploSeparado.length; i++) {
 
-            if (entreParentese(exemploSeparado[i]) == true) {
+            if (automatoN(exemploSeparado[i]) == true) {
                 if (validaParenteses(exemploSeparado[i]) == true) {
                     //System.out.println("Parenteses balanceados");
-                    if (automatoN(exemploSeparado[i]) == true) {
+                    if (entreParentese(exemploSeparado[i]) == true) {
                         System.out.println(eval(exemploSeparado[i]));
-                    } else {
-                        System.out.println(automatoN(exemploSeparado[i]));
                     }
                 } else {
                     System.out.println("Parentese não balanceados");
                 }
-            } else {
-                System.out.println("erro entreParentese ");
-                System.out.println(entreParentese(exemploSeparado[i]));
             }
             // System.out.println(validaParenteses(exemplo));
+            System.out.println("");
         }
 
     }
@@ -41,6 +40,7 @@ public class automato {
         String regraNumero = "\\d*";
         String regraSinal = "[*+-/]";
         String regraGrande = "^(?!.*([*+-/]){2})([0-9._\\-\\+\\*\\/\\(\\)]*)$";
+        String regraLetra = "[a-zA-Z]";
         StringBuilder estadoAtual = new StringBuilder();
 
         for (int i = 0; i < texto.length(); i++) {
@@ -50,6 +50,12 @@ public class automato {
             String solo = String.valueOf(unico);
             // estadoTotalString é o estadoAtual em forma de string
             String estadoTotalString = estadoAtual.toString();
+
+            if(solo.matches(regraLetra)){
+                resultado = false;
+                System.out.println("letras nao sao perimitidas");
+                break;
+            }
 
             if (solo.equals("(") || solo.equals(")")) {
                 estadoAtual.append(solo);
@@ -76,7 +82,6 @@ public class automato {
                 // Regra que só se aplica ao fim do texto se o ultimo digito for um sinal
                 if (i == texto.length() - 1 && solo.matches(regraSinal)) {
                     resultado = false;
-                    System.out.println(estadoAtual);
                     System.out.println("equacoes nao podem terminar ou comecar com sinal");
                     break;
 
@@ -88,6 +93,7 @@ public class automato {
                 System.out.println("Nao e possivel ter dois sinais seguidos");
                 break;
             }
+
 
             // printa que char esta sendo avalidado no momento
             //System.out.println(estadoAtual.toString());
@@ -129,6 +135,12 @@ public class automato {
         String regra2 = "^(?!.*\\(([*+-/])\\))([0-9._\\-\\+\\*\\/\\(\\) ]*)$";
         String regra3 = "^(?!.*\\d*([*+-/])\\))([0-9._\\-\\+\\*\\/\\(\\) ]*)$";
         Boolean resultado = false;
+
+        if(texto.matches("()")){
+            resultado = false;
+            System.out.println("Não é permitdo parenteses vazios");
+            return resultado;
+        }
 
         if (texto.matches(regra1)) {
             if (texto.matches(regra2)) {
