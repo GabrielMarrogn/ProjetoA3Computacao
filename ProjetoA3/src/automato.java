@@ -3,11 +3,10 @@ import java.util.Stack;
 public class automato {
     public static void main(String[] args) {
         // Todos as formulas dentro do exemplo devem ser aceitas
-        //String exemploE = "(24 / 1) * 9 + 3; 10 - 4; (1 * 3 + 4 / 5 - 2) +100 ; 10 - 4 + 12; (4 + 4) / 4; 1+1;";
+        String exemplo = "(24 / 1) * 9 + 3; 10 - 4; (1 * 3 + 4 / 5 - 2) +100 ; 10 - 4 + 12; (4 + 4) / 4; 1+1;";
 
         //String usada para testar erros
-        String exemplo = "(1+1) + (); 4+4+a; 10/2+; (2+7-1; 2++2; 22; a";
-        
+        //String exemploE = "(1+1) + (); 4+4+a; 10/2+; (2+7-1; 2++2; 22; a";
 
         // Retira todos os espacos em branco
         String espaco = exemplo.replaceAll(" ", "").trim();
