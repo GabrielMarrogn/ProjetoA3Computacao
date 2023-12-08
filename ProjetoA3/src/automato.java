@@ -3,10 +3,10 @@ import java.util.Stack;
 public class automato {
     public static void main(String[] args) {
         // Todos as formulas dentro do exemplo devem ser aceitas
-        String exemplo = "(24 / 1) * 9 + 3; 10 - 4; (1 * 3 + 4 / 5 - 2) +100 ; 10 - 4 + 12; (4 + 4) / 4; 1+1;";
+        String exemplo = "(24 / 1) * 9 + 3; 10 - 4; (1 * 3 + 4 / 5 - 2) +100 ; 10 - 4 + 12; (4 + 4) / 4; 5+5;";
 
-        //String usada para testar erros
-        //String exemploE = "(1+1) + (); 4+4+a; 10/2+; (2+7-1; 2++2; 22; a";
+        // String usada para testar erros
+        //String exemplo = "(1+1) + (); 4+4+a; 10/2+; (2+7-1; 2++2; 22; a";
 
         // Retira todos os espacos em branco
         String espaco = exemplo.replaceAll(" ", "").trim();
@@ -14,12 +14,12 @@ public class automato {
         // Divide as string pelos ";" e coloca em um array
         String[] exemploSeparado = espaco.split(";");
 
-        //for para checar o se a string passa por todos os metodos de checagem 
+        // for para checar o se a string passa por todos os metodos de checagem
         for (int i = 0; i < exemploSeparado.length; i++) {
 
             if (automatoN(exemploSeparado[i]) == true) {
                 if (validaParenteses(exemploSeparado[i]) == true) {
-                    //System.out.println("Parenteses balanceados");
+                    // System.out.println("Parenteses balanceados");
                     if (entreParentese(exemploSeparado[i]) == true) {
                         System.out.println(eval(exemploSeparado[i]));
                     }
@@ -36,10 +36,10 @@ public class automato {
     // Cria o automato para checar o texto
     public static Boolean automatoN(String texto) {
         Boolean resultado = false;
-        String regraNumero = "\\d*";
-        String regraSinal = "[*+-/]";
-        String regraGrande = "^(?!.*([*+-/]){2})([0-9._\\-\\+\\*\\/\\(\\)]*)$";
-        String regraLetra = "[a-zA-Z]";
+        String regraNumero = "\\d*"; // impede numeros
+        String regraSinal = "[*+-/]"; // permite sinais
+        String regraGrande = "^(?!.*([*+-/]){2})([0-9._\\-\\+\\*\\/\\(\\)]*)$";// impede dois sinais
+        String regraLetra = "[a-zA-Z]"; // impede letra
         StringBuilder estadoAtual = new StringBuilder();
 
         for (int i = 0; i < texto.length(); i++) {
@@ -50,7 +50,7 @@ public class automato {
             // estadoTotalString é o estadoAtual em forma de string
             String estadoTotalString = estadoAtual.toString();
 
-            if(solo.matches(regraLetra)){
+            if (solo.matches(regraLetra)) {
                 resultado = false;
                 System.out.println("letras nao sao perimitidas");
                 break;
@@ -93,16 +93,13 @@ public class automato {
                 break;
             }
 
-
             // printa que char esta sendo avalidado no momento
-            //System.out.println(estadoAtual.toString());
+            // System.out.println(estadoAtual.toString());
         }
         return resultado;
     }
 
     // Cria um funcao que valida os parenteses de uma exprecao
-    //Codigo retirado e aptado de :
-    // https://www.prepbytes.com/blog/java/check-the-balance-of-parenthesis-in-java/
     public static Boolean validaParenteses(String expression) {
         int i, length;
         char ch;
@@ -135,7 +132,7 @@ public class automato {
         String regra3 = "^(?!.*\\d*([*+-/])\\))([0-9._\\-\\+\\*\\/\\(\\) ]*)$";
         Boolean resultado = false;
 
-        if(texto.matches("()")){
+        if (texto.matches("()")) {
             resultado = false;
             System.out.println("Não é permitdo parenteses vazios");
             return resultado;
@@ -144,7 +141,7 @@ public class automato {
         if (texto.matches(regra1)) {
             if (texto.matches(regra2)) {
                 if (texto.matches(regra3)) {
-                    //System.out.println("Nao há problema com a String");
+                    // System.out.println("Nao há problema com a String");
                     resultado = true;
                     return resultado;
                 }
@@ -160,9 +157,7 @@ public class automato {
 
     }
 
-    // O codigo abaixo foi retirado de
-    // https://stackoverflow.com/questions/3422673/how-to-evaluate-a-math-expression-given-in-string-form
-    // feito pelo o usuario Boann
+    // Parte do codigo usado para transformar a string em double
     public static double eval(final String str) {
         return new Object() {
             int pos = -1, ch;
@@ -188,13 +183,6 @@ public class automato {
                     throw new RuntimeException("Unexpected: " + (char) ch);
                 return x;
             }
-
-            // Grammar:
-            // expression = term | expression `+` term | expression `-` term
-            // term = factor | term `*` factor | term `/` factor
-            // factor = `+` factor | `-` factor | `(` expression `)` | number
-            // | functionName `(` expression `)` | functionName factor
-            // | factor `^` factor
 
             double parseExpression() {
                 double x = parseTerm();
@@ -235,29 +223,8 @@ public class automato {
                 } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
                     while ((ch >= '0' && ch <= '9') || ch == '.')
                         nextChar();
-                    x = Double.parseDouble(str.substring(startPos, this.pos));
-                } else if (ch >= 'a' && ch <= 'z') { // functions
-                    while (ch >= 'a' && ch <= 'z')
-                        nextChar();
-                    String func = str.substring(startPos, this.pos);
-                    if (eat('(')) {
-                        x = parseExpression();
-                        if (!eat(')'))
-                            throw new RuntimeException("Missing ')' after argument to " + func);
-                    } else {
-                        x = parseFactor();
-                    }
-                    if (func.equals("sqrt"))
-                        x = Math.sqrt(x);
-                    else if (func.equals("sin"))
-                        x = Math.sin(Math.toRadians(x));
-                    else if (func.equals("cos"))
-                        x = Math.cos(Math.toRadians(x));
-                    else if (func.equals("tan"))
-                        x = Math.tan(Math.toRadians(x));
-                    else
-                        throw new RuntimeException("Unknown function: " + func);
-                } else {
+                    x = Double.parseDouble(str.substring(startPos, this.pos));}
+                else {
                     throw new RuntimeException("Unexpected: " + (char) ch);
                 }
 
@@ -268,4 +235,6 @@ public class automato {
             }
         }.parse();
     }
+
 }
+
